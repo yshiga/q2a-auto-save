@@ -2,24 +2,25 @@ $(function($) {
     var is_autosave_start = false;
     var timer_id;
 
-    $('#title').keyUp(function(){
+    $('#title').keyup(function(){
         if (!is_autosave_start) {
             autosave_start();
         }
     });
     
-    $('textarea[name="content"]').keyUp(function(){
+    $('.editable').keyup(function(){
         if (!is_autosave_start) {
             autosave_start();
         }
     });
     
     function autosave_start() {
+        console.log('auto save start!');
         is_autosave_start = true;
         timer_id = setInterval(ajax_set_item, 10000);
     }
     
-    function ajax_set_item (field, value) {
+    function ajax_set_item () {
         // jQuery.post(ajax_url, { field: field, value: value }, function(response) {
         //     console.log(response);
         // });
