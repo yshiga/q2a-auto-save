@@ -17,3 +17,6 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 	header('Location: ../../');
 	exit;
 }
+
+// layer
+qa_register_plugin_layer('qa-auto-save-layer.php','Auto Save Layer');
