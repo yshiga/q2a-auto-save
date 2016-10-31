@@ -23,7 +23,7 @@ class qa_auto_save_response_page {
          * Internal security (non for third-party applications)
          * 
          * */
-        if (qa_user_permit_error ( 'plugin_rest_api_permit' )) {
+        if (!qa_is_logged_in()) {
             http_response_code ( 401 );
             
             $ret_val = array ();
