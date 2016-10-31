@@ -23,7 +23,7 @@ $(function($) {
     
     function autosave_start() {
         is_autosave_start = true;
-        timer_id = setInterval(ajax_set_item, 15000);
+        timer_id = setInterval(ajax_set_item, 30000);
     }
     
     function ajax_set_item () {
