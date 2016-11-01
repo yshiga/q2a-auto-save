@@ -46,7 +46,6 @@ class qa_auto_save_response_page {
             case 'question' :
                 if (strcmp($method, 'POST') == 0) {
                     $inputJSON = file_get_contents('php://input');
-                    // $content = json_decode($inputJSON, TRUE );
                     
                     echo $this->post_draft(AS_KEY_QUESTION, $inputJSON);
                 } else {
@@ -57,9 +56,8 @@ class qa_auto_save_response_page {
             case 'answer' :
                 if (strcmp($method, 'POST') == 0) {
                     $inputJSON = file_get_contents('php://input');
-                    $content = json_decode( $inputJSON, TRUE );
                     
-                    echo $this->post_draft(AS_KEY_ANSWER, $content);
+                    echo $this->post_draft(AS_KEY_ANSWER, $inputJSON);
                 } else {
                     echo $this->get_draft(AS_KEY_ANSWER);
                 }
@@ -68,10 +66,8 @@ class qa_auto_save_response_page {
             case 'comment' :
                 if (strcmp($method, 'POST') == 0) {
                     $inputJSON = file_get_contents('php://input');
-                    // $content = json_decode( $inputJSON, TRUE );
-                    $content = $inputJSON;
                     
-                    echo $this->post_draft(AS_KEY_COMMENT, $content);
+                    echo $this->post_draft(AS_KEY_COMMENT, $inputJSON);
                 } else {
                     echo $this->get_draft(AS_KEY_COMMENT);
                 }
@@ -119,11 +115,7 @@ class qa_auto_save_response_page {
     function post_draft($key, $JSONdata)
     {
         $userid = qa_get_logged_in_userid();
-        // $values = array(
-        //     'title' => $content['title'],
-        //     'content' => $content['content']
-        // );
-        // $json_data = json_encode($values, JSON_PRETTY_PRINT);
+        
         qa_db_usermeta_set($userid, $key, $JSONdata);
         
         $ret_val = array();
