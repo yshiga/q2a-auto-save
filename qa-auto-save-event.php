@@ -12,8 +12,7 @@ class q2a_auto_save_event
     function process_event($event, $post_userid, $post_handle, $cookieid, $params)
     {
         if ($event === 'q_post') {
-            $key = 'autosave_question';
-            qa_db_usermeta_clear($post_userid, $key);
+            qa_db_usermeta_clear($post_userid, AS_KEY_QUESTION);
         }
     }
 }

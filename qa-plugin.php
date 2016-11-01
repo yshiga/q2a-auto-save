@@ -18,6 +18,10 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 	exit;
 }
 
+define('AS_KEY_QUESTION', 'q2a_as_question');
+define('AS_KEY_ANSWER', 'q2a_as_answer');
+define('AS_KEY_COMMENT', 'q2a_as_comment');
+
 // layer
 qa_register_plugin_layer('qa-auto-save-layer.php','Auto Save Layer');
 // page

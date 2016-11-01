@@ -44,39 +44,36 @@ class qa_auto_save_response_page {
         
         switch ($resource) {
             case 'question' :
-                $key = 'autosave_question';
                 if (strcmp($method, 'POST') == 0) {
                     $inputJSON = file_get_contents('php://input');
                     // $content = json_decode($inputJSON, TRUE );
                     
-                    echo $this->post_draft($key, $inputJSON);
+                    echo $this->post_draft(AS_KEY_QUESTION, $inputJSON);
                 } else {
-                    echo $this->get_draft($key);
+                    echo $this->get_draft(AS_KEY_QUESTION);
                 }
                 break;
             
             case 'answer' :
-                $key = 'autosave_answer';
                 if (strcmp($method, 'POST') == 0) {
                     $inputJSON = file_get_contents('php://input');
                     $content = json_decode( $inputJSON, TRUE );
                     
-                    echo $this->post_draft($key, $content);
+                    echo $this->post_draft(AS_KEY_ANSWER, $content);
                 } else {
-                    echo $this->get_draft($key);
+                    echo $this->get_draft(AS_KEY_ANSWER);
                 }
                 break;
             
             case 'comment' :
-                $key = 'autosave_comment';
                 if (strcmp($method, 'POST') == 0) {
                     $inputJSON = file_get_contents('php://input');
                     // $content = json_decode( $inputJSON, TRUE );
                     $content = $inputJSON;
                     
-                    echo $this->post_draft($key, $content);
+                    echo $this->post_draft(AS_KEY_COMMENT, $content);
                 } else {
-                    echo $this->get_draft($key);
+                    echo $this->get_draft(AS_KEY_COMMENT);
                 }
                 break;
             
