@@ -98,16 +98,19 @@ class qa_auto_save_response_page {
         $userid = qa_get_logged_in_userid();
         $json = qa_db_usermeta_get($userid, $key);
         
-        if (empty($json)) {            
-            $json_object['title'] = '';
-            $json_object['content'] = '';
-            
+        if (empty($json)) {
+            http_response_code ( 400 );
+            $json_object ['statuscode'] = '400';
+            $json_object ['message'] = 'Bad Request';
+            $json_object ['details'] = 'No Data';
+            array_push ( $ret_val, $json_object );
+            return json_encode ( $ret_val, JSON_PRETTY_PRINT );            
         } else {
             $json_object = json_decode($json);
         }
         
-        array_push($ret_val, $json_object);
         http_response_code(200);
+        array_push($ret_val, $json_object);
         
         return json_encode($ret_val, JSON_PRETTY_PRINT);
     }
