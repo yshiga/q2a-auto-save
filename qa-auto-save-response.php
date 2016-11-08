@@ -46,7 +46,6 @@ class qa_auto_save_response_page {
             case 'question' :
                 if (strcmp($method, 'POST') == 0) {
                     $inputJSON = file_get_contents('php://input');
-                    
                     echo $this->post_draft(AS_KEY_QUESTION, $inputJSON);
                 } else {
                     echo $this->get_draft(AS_KEY_QUESTION);
@@ -56,22 +55,21 @@ class qa_auto_save_response_page {
             case 'answer' :
                 if (strcmp($method, 'POST') == 0) {
                     $inputJSON = file_get_contents('php://input');
-                    
                     echo $this->post_draft(AS_KEY_ANSWER, $inputJSON);
                 } else {
                     echo $this->get_draft(AS_KEY_ANSWER);
                 }
                 break;
             
-            case 'comment' :
-                if (strcmp($method, 'POST') == 0) {
-                    $inputJSON = file_get_contents('php://input');
-                    
-                    echo $this->post_draft(AS_KEY_COMMENT, $inputJSON);
-                } else {
-                    echo $this->get_draft(AS_KEY_COMMENT);
-                }
-                break;
+            // case 'comment' :
+            //     if (strcmp($method, 'POST') == 0) {
+            //         $inputJSON = file_get_contents('php://input');
+            //         
+            //         echo $this->post_draft(AS_KEY_COMMENT, $inputJSON);
+            //     } else {
+            //         echo $this->get_draft(AS_KEY_COMMENT);
+            //     }
+            //     break;
             
             default :
                 http_response_code ( 400 );
@@ -94,17 +92,21 @@ class qa_auto_save_response_page {
         $ret_val = array();
         
         $json_object = array();
+        $post_id = qa_get('postid');
+        if (!empty($post_id)) {
+            $key .= '_' . $post_id;
+        }
         
         $userid = qa_get_logged_in_userid();
         $json = qa_db_usermeta_get($userid, $key);
         
         if (empty($json)) {
-            http_response_code ( 400 );
-            $json_object ['statuscode'] = '400';
-            $json_object ['message'] = 'Bad Request';
-            $json_object ['details'] = 'No Data';
+            http_response_code ( 204 );
+            $json_object ['statuscode'] = '204';
+            $json_object ['message'] = 'No Content';
+            $json_object ['details'] = '保存データはありません';
             array_push ( $ret_val, $json_object );
-            return json_encode ( $ret_val, JSON_PRETTY_PRINT );            
+            return json_encode ( $ret_val, JSON_PRETTY_PRINT );
         } else {
             $json_object = json_decode($json);
         }
@@ -118,8 +120,18 @@ class qa_auto_save_response_page {
     function post_draft($key, $JSONdata)
     {
         $userid = qa_get_logged_in_userid();
+        $json_data = json_decode($JSONdata, true);
+        if (isset($json_data['post_id'])) {
+            $key .= '_' . $json_data['post_id'];
+        }
+        $new_json = array(
+            'name' => $json_data['name'],
+            'title' => $json_data['title'],
+            'content' => $json_data['content'],
+        );
+        $save_data = json_encode($new_json, JSON_UNESCAPED_UNICODE);
         
-        qa_db_usermeta_set($userid, $key, $JSONdata);
+        qa_db_usermeta_set($userid, $key, $save_data);
         
         $ret_val = array();
         
