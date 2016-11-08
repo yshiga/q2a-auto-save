@@ -1,6 +1,7 @@
 $(function($) {
     var is_autosave_start = false;
     var timer_id;
+    var elem_name;
     
     ajax_get_item();
     
@@ -11,35 +12,41 @@ $(function($) {
     });
     
     $('.editable').keyup(function(){
-        var elem_name = $(this).attr('name');
+        elem_name = $(this).attr('name');
         if (!is_autosave_start && (elem_name === 'content' || elem_name === 'a_content')) {
-            var editor_id = $(this).attr('medium-editor-textarea-id');
-            autosave_start(elem_name, editor_id);
+            autosave_start(elem_name);
         }
     });
     
     $('#q_submit').click(function(){
-        ajax_set_item();
+        if (elem_name !== '') {
+            ajax_set_item(elem_name);
+        }
     })
     
-    function autosave_start(elem_name, editor_id) {
+    function autosave_start(elem_name) {
         is_autosave_start = true;
-        timer_id = setInterval(ajax_set_item, 30000, elem_name, editor_id);
+        timer_id = setInterval(ajax_set_item, 30000, elem_name);
     }
     
-    function editor_content(editor_id) {
-        var editor_elm = document.getElementById(editor_id);
-        var target = MediumEditor.getEditorFromElement(editor_elm);
-        var allContents = target.serialize();
-        var content = allContents[editor_id].value;
+    function editor_content(elem_name) {
+        var content = '';
+        var editor_elm = document.getElementsByName(elem_name);
+        if (editor_elm.length > 0) {
+            var target = MediumEditor.getEditorFromElement(editor_elm[0]);
+            var allContents = target.serialize();
+            var editorId = target.elements[0].id;
+            var content = allContents[editorId].value;
+        }
         return content;
     }
     
-    function ajax_set_item(elem_name, editor_id) {
+    function ajax_set_item(elem_name) {
         var JSONdata = {
-          name: elem_name,
-          title: $('#title').val(),
-          content: editor_content(editor_id)
+            post_id: post_id,
+            name: elem_name,
+            title: $('#title').val(),
+            content: editor_content(elem_name)
         }; 
         $.ajax({
             url: ajax_url + resource,
@@ -52,7 +59,7 @@ $(function($) {
             console.log('Auto Save');
         })
         .fail(function(res) {
-            console.log(res[0]);
+            console.log(res);
         });
     }
         
@@ -62,16 +69,22 @@ $(function($) {
             type: 'GET',
             dataType: 'json',
             cache : false,
-            data: {}
+            data: { postid: post_id }
         })
-        .done(function(res) {
-            if (res[0] !== null && res[0] !== undefined) {
-                if ($('title') !== undefined) {
-                    $('#title').val(res[0].title);
+        .done(function(res, status, xhr) {
+            if (xhr.status === 204) {
+                console.log(xhr.statusText);
+            } else {
+                if (res[0] !== null && res[0] !== undefined) {
+                    if ($('#title') !== undefined) {
+                        $('#title').val(res[0].title);
+                    }
+                    var editor_elm = document.getElementsByName(res[0].name);
+                    if (editor_elm.length > 0) {
+                        var target = MediumEditor.getEditorFromElement(editor_elm[0]);
+                        target.setContent(res[0].content, 0);
+                    }
                 }
-                var editor_elm = document.getElementsByName(res[0].name);
-                var target = MediumEditor.getEditorFromElement(editor_elm[0]);
-                target.setContent(res[0].content, 0);
             }
         })
         .fail(function(res) {
