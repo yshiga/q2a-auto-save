@@ -7,7 +7,12 @@ $(function($) {
     
     $('#title').keyup(function(){
         if (!is_autosave_start) {
-            autosave_start();
+            if (check_elem_name('content')) {
+                elem_name = 'content';
+            } else if (check_elem_name('a_content')) {
+                elem_name = 'a_content';
+            }
+            autosave_start(elem_name);
         }
     });
     
@@ -24,6 +29,14 @@ $(function($) {
         }
     })
     
+    function check_elem_name(name) {
+        var result = document.getElementsByName(name);
+        if (result.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     function autosave_start(elem_name) {
         is_autosave_start = true;
         timer_id = setInterval(ajax_set_item, 30000, elem_name);
