@@ -27,7 +27,13 @@ $(function($) {
         if (elem_name !== '') {
             ajax_set_item(elem_name);
         }
-    })
+    });
+    
+    $('#a_submit').click(function(){
+        if (elem_name !== '') {
+            ajax_set_item(elem_name);
+        }
+    });
     
     function check_elem_name(name) {
         var result = document.getElementsByName(name);
