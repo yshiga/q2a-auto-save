@@ -2,6 +2,7 @@ $(function($) {
     var is_autosave_start = false;
     var timer_id;
     var elem_name;
+    var warn_on_leave = false;
     
     ajax_get_item();
     
@@ -13,6 +14,7 @@ $(function($) {
                 elem_name = 'a_content';
             }
             autosave_start(elem_name);
+            warn_on_leave = true;
         }
     });
     
@@ -21,18 +23,34 @@ $(function($) {
         if (!is_autosave_start && (elem_name === 'content' || elem_name === 'a_content')) {
             autosave_start(elem_name);
         }
+        warn_on_leave = true;
     });
     
     $('#q_submit').click(function(){
+        warn_on_leave = false;
         if (elem_name !== '') {
             ajax_set_item(elem_name);
         }
     });
     
     $('#a_submit').click(function(){
+        warn_on_leave = false;
         if (elem_name !== '') {
             ajax_set_item(elem_name);
         }
+    });
+    
+    var onBeforeunloadHandler = function(e) {
+        if(warn_on_leave) {
+            return '本当に移動しますか？';
+        }
+    };
+    // warn_on_leaveのイベントを登録
+    $(window).on('beforeunload', onBeforeunloadHandler);
+
+    $('form').on('submit', function(e) {
+        // warn_on_leaveのイベントを削除
+        $(window).off('beforeunload', onBeforeunloadHandler);
     });
     
     function check_elem_name(name) {
@@ -43,6 +61,7 @@ $(function($) {
             return false;
         }
     }
+    
     function autosave_start(elem_name) {
         is_autosave_start = true;
         timer_id = setInterval(ajax_set_item, 30000, elem_name);
