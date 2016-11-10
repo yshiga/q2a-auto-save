@@ -27,17 +27,19 @@ $(function($) {
     });
     
     $('#q_submit').click(function(){
-        warn_on_leave = false;
         if (elem_name !== '') {
             ajax_set_item(elem_name);
         }
     });
     
     $('#a_submit').click(function(){
-        warn_on_leave = false;
         if (elem_name !== '') {
             ajax_set_item(elem_name);
         }
+    });
+    
+    $('input[type="submit"]').click(function(){
+        warn_on_leave = false;
     });
     
     var onBeforeunloadHandler = function(e) {
