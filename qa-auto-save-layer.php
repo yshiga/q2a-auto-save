@@ -2,18 +2,22 @@
 
 class qa_html_theme_layer extends qa_html_theme_base
 {
-    function form($form)
+    function main_parts($content)
     {
         if ($this->template === 'ask') {
             if (qa_opt('editor_for_qs') == 'Medium Editor') {
-                $form['buttons']['ask']['tags'] .= ' id="q_submit"';
+                if (isset($content['form'])) {
+                    $content['form']['buttons']['ask']['tags'] .= ' id="q_submit"';
+                }
             } 
         } elseif ($this->template === 'question') {
             if (qa_opt('editor_for_qs') == 'Medium Editor') {
-                $form['buttons']['answer']['tags'] .= ' id="a_submit"';
+                if (isset($content['a_form']['answer'])) {
+                    $content['a_form']['buttons']['answer']['tags'] .= ' id="a_submit"';
+                }
             }
         }
-        qa_html_theme_base::form($form);
+        qa_html_theme_base::main_parts($content);
     }
     
     function body_footer()

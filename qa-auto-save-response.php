@@ -125,9 +125,9 @@ class qa_auto_save_response_page {
             $key .= '_' . $json_data['post_id'];
         }
         $new_json = array(
-            'name' => $json_data['name'],
-            'title' => $json_data['title'],
-            'content' => $json_data['content'],
+            'name' => isset($json_data['name']) ? $json_data['name'] : '',
+            'title' => isset($json_data['title']) ? $json_data['title'] : '',
+            'content' => isset($json_data['content']) ? $json_data['content'] : '',
         );
         $save_data = json_encode($new_json, JSON_UNESCAPED_UNICODE);
         
