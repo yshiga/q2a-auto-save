@@ -26,20 +26,13 @@ $(function($) {
         warn_on_leave = true;
     });
     
-    $('#q_submit').click(function(){
-        if (elem_name !== '') {
-            ajax_set_item(elem_name);
-        }
-    });
-    
-    $('#a_submit').click(function(){
-        if (elem_name !== '') {
-            ajax_set_item(elem_name);
-        }
-    });
-    
     $('input[type="submit"]').click(function(){
+        elem_id = $(this).attr('id');
         warn_on_leave = false;
+        if (elem_id === 'q_submit' || elem_id === 'a_submit') {
+            console.log('set_item');
+            ajax_set_item(elem_name);
+        }
     });
     
     var onBeforeunloadHandler = function(e) {
