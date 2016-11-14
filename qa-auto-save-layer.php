@@ -23,7 +23,7 @@ class qa_html_theme_layer extends qa_html_theme_base
     function body_footer()
     {
         $ajax = 'var ajax_url = "'.qa_path('autosave').'/";';
-        $warn_message = qa_lang('qa_as_lang/warn_message');
+        $warn_message = qa_lang_html('qa_as_lang/warn_message');
         if ($this->template === 'ask'
             && qa_opt('editor_for_qs') === 'Medium Editor') {
             $ajax .= 'var resource = "question";';
