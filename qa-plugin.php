@@ -22,6 +22,8 @@ define('AS_KEY_QUESTION', 'q2a_as_question');
 define('AS_KEY_ANSWER', 'q2a_as_answer');
 define('AS_KEY_COMMENT', 'q2a_as_comment');
 
+// language
+qa_register_plugin_phrases('qa-auto-save-lang-*.php', 'qa_as_lang');
 // layer
 qa_register_plugin_layer('qa-auto-save-layer.php','Auto Save Layer');
 // page
