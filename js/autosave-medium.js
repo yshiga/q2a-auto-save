@@ -36,7 +36,7 @@ $(function($) {
     
     var onBeforeunloadHandler = function(e) {
         if(warn_on_leave) {
-            return '本当に移動しますか？';
+            return warn_message;
         }
     };
     // warn_on_leaveのイベントを登録
