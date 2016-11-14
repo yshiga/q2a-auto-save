@@ -104,7 +104,7 @@ class qa_auto_save_response_page {
             http_response_code ( 204 );
             $json_object ['statuscode'] = '204';
             $json_object ['message'] = 'No Content';
-            $json_object ['details'] = '保存データはありません';
+            $json_object ['details'] = 'No Data';
             array_push ( $ret_val, $json_object );
             return json_encode ( $ret_val, JSON_PRETTY_PRINT );
         } else {
