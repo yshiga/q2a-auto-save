@@ -1,49 +1,84 @@
 $(function($) {
     var is_autosave_start = false;
     var timer_id;
-    var editor_index = 0;
+    var elem_name;
+    var warn_on_leave = false;
     
-    var title = $('#title') ? $('#title').val() : '';
-    var content = editor_content();
-    content = content.replace(/(<([^>]+)>)/ig,"");
-    if (title === '' && content === '') {
-        ajax_get_item();
-    }
+    ajax_get_item();
     
     $('#title').keyup(function(){
         if (!is_autosave_start) {
-            autosave_start();
+            if (check_elem_name('content')) {
+                elem_name = 'content';
+            } else if (check_elem_name('a_content')) {
+                elem_name = 'a_content';
+            }
+            autosave_start(elem_name);
+            warn_on_leave = true;
         }
     });
     
     $('.editable').keyup(function(){
-        if (!is_autosave_start) {
-            autosave_start();
+        elem_name = $(this).attr('name');
+        if (!is_autosave_start && (elem_name === 'content' || elem_name === 'a_content')) {
+            autosave_start(elem_name);
+        }
+        warn_on_leave = true;
+    });
+    
+    $('input[type="submit"]').click(function(){
+        elem_id = $(this).attr('id');
+        warn_on_leave = false;
+        if (elem_id === 'q_submit' || elem_id === 'a_submit') {
+            ajax_set_item(elem_name);
         }
     });
     
-    $('#q_submit').click(function(){
-        ajax_set_item();
-    })
+    var onBeforeunloadHandler = function(e) {
+        if(warn_on_leave) {
+            return warn_message;
+        }
+    };
+    // warn_on_leaveのイベントを登録
+    $(window).on('beforeunload', onBeforeunloadHandler);
+
+    $('form').on('submit', function(e) {
+        // warn_on_leaveのイベントを削除
+        $(window).off('beforeunload', onBeforeunloadHandler);
+    });
     
-    function autosave_start() {
-        is_autosave_start = true;
-        timer_id = setInterval(ajax_set_item, 30000);
+    function check_elem_name(name) {
+        var result = document.getElementsByName(name);
+        if (result.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
-    function editor_content() {
-        var allContents = editor.serialize();
-        var editorId = editor.elements[0].id;
-        var content = allContents[editorId].value;
+    function autosave_start(elem_name) {
+        is_autosave_start = true;
+        timer_id = setInterval(ajax_set_item, 30000, elem_name);
+    }
+    
+    function editor_content(elem_name) {
+        var content = '';
+        var editor_elm = document.getElementsByName(elem_name);
+        if (editor_elm.length > 0) {
+            var target = MediumEditor.getEditorFromElement(editor_elm[0]);
+            var allContents = target.serialize();
+            var editorId = target.elements[0].id;
+            var content = allContents[editorId].value;
+        }
         return content;
     }
     
-    function ajax_set_item () {
-        editor_index = $('.editable').data('medium-editor-editor-index') - 1;
+    function ajax_set_item(elem_name) {
         var JSONdata = {
-          index: editor_index,
-          title: $('#title').val(),
-          content: editor_content()
+            post_id: post_id,
+            name: elem_name,
+            title: $('#title').val(),
+            content: editor_content(elem_name)
         }; 
         $.ajax({
             url: ajax_url + resource,
@@ -56,7 +91,7 @@ $(function($) {
             console.log('Auto Save');
         })
         .fail(function(res) {
-            console.log(res[0]);
+            console.log(res);
         });
     }
         
@@ -66,19 +101,26 @@ $(function($) {
             type: 'GET',
             dataType: 'json',
             cache : false,
-            data: {}
+            data: { postid: post_id }
         })
-        .done(function(res) {
-            console.log('Get Item');
-            if (res[0] !== null && res[0] !== undefined) {
-                if ($('title') !== undefined) {
-                    $('#title').val(res[0].title);
+        .done(function(res, status, xhr) {
+            if (xhr.status === 204) {
+                console.log(xhr.statusText);
+            } else {
+                if (res[0] !== null && res[0] !== undefined) {
+                    if ($('#title') !== undefined) {
+                        $('#title').val(res[0].title);
+                    }
+                    var editor_elm = document.getElementsByName(res[0].name);
+                    if (editor_elm.length > 0) {
+                        var target = MediumEditor.getEditorFromElement(editor_elm[0]);
+                        target.setContent(res[0].content, 0);
+                    }
                 }
-                editor.setContent(res[0].content, res[0].index);
             }
         })
         .fail(function(res) {
-            console.log(res[0]);
+            console.log(res);
         });
     }
 });
