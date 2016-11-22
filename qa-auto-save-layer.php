@@ -12,7 +12,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             } 
         } elseif ($this->template === 'question') {
             if (qa_opt('editor_for_qs') == 'Medium Editor') {
-                if (isset($content['a_form']['answer'])) {
+                if (isset($content['a_form']['buttons']['answer'])) {
                     $content['a_form']['buttons']['answer']['tags'] .= ' id="a_submit"';
                 }
             }
