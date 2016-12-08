@@ -22,23 +22,26 @@ class qa_html_theme_layer extends qa_html_theme_base
     
     function body_footer()
     {
-        $ajax = 'var ajax_url = "'.qa_path('autosave').'/";';
-        $warn_message = qa_lang_html('qa_as_lang/warn_message');
-        if ($this->template === 'ask'
-            && qa_opt('editor_for_qs') === 'Medium Editor') {
-            $ajax .= 'var resource = "question";';
-            $ajax .= 'var post_id = "0000";';
-            $ajax .= 'var warn_message ="'.$warn_message.'";';
-            $script = QA_HTML_THEME_LAYER_URLTOROOT.'js/autosave-medium.js';
-            $this->output_script($ajax, $script);
-        } elseif ($this->template === 'question'
-                  && qa_opt('editor_for_as') == 'Medium Editor') {
-            $post_id = $this->get_post_id();
-            $ajax .= 'var resource = "answer";';
-            $ajax .= 'var post_id ="'.$post_id.'";';
-            $ajax .= 'var warn_message ="'.$warn_message.'";';
-            $script = QA_HTML_THEME_LAYER_URLTOROOT.'js/autosave-medium.js';
-            $this->output_script($ajax, $script);
+        // ログインしているときだけscriptを読み込む
+        if (qa_is_logged_in()) {
+            $ajax = 'var ajax_url = "'.qa_path('autosave').'/";';
+            $warn_message = qa_lang_html('qa_as_lang/warn_message');
+            if ($this->template === 'ask'
+                && qa_opt('editor_for_qs') === 'Medium Editor') {
+                $ajax .= 'var resource = "question";';
+                $ajax .= 'var post_id = "0000";';
+                $ajax .= 'var warn_message ="'.$warn_message.'";';
+                $script = QA_HTML_THEME_LAYER_URLTOROOT.'js/autosave-medium.js';
+                $this->output_script($ajax, $script);
+            } elseif ($this->template === 'question'
+                      && qa_opt('editor_for_as') == 'Medium Editor') {
+                $post_id = $this->get_post_id();
+                $ajax .= 'var resource = "answer";';
+                $ajax .= 'var post_id ="'.$post_id.'";';
+                $ajax .= 'var warn_message ="'.$warn_message.'";';
+                $script = QA_HTML_THEME_LAYER_URLTOROOT.'js/autosave-medium.js';
+                $this->output_script($ajax, $script);
+            }
         }
         qa_html_theme_base::body_footer();
     }
