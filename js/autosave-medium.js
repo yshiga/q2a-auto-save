@@ -27,19 +27,19 @@ $(function($) {
     });
     
     $('input[type="submit"]').click(function(){
-        elem_id = $(this).attr('id');
         warn_on_leave = false;
-        if (elem_id === 'q_submit' || elem_id === 'a_submit') {
-            ajax_set_item(elem_name);
-        }
+        // elem_id = $(this).attr('id');
+        // if (elem_id === 'q_submit' || elem_id === 'a_submit') {
+        //     ajax_set_item(elem_name);
+        // }
     });
     
     $('button').click(function(){
-        elem_id = $(this).attr('id');
         warn_on_leave = false;
-        if (elem_id === 'q_submit' || elem_id === 'a_submit') {
-            ajax_set_item(elem_name);
-        }
+        // elem_id = $(this).attr('id');
+        // if (elem_id === 'q_submit' || elem_id === 'a_submit') {
+        //     ajax_set_item(elem_name);
+        // }
     });
     
     var onBeforeunloadHandler = function(e) {
