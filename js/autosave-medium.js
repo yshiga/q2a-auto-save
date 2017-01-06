@@ -3,8 +3,11 @@ $(function($) {
     var timer_id;
     var elem_name;
     var warn_on_leave = false;
+    var snackbarContainer = document.querySelector('#autosave-toast');
     
-    ajax_get_item();
+    $(window).on('load', function(){
+      ajax_get_item();
+    });
     
     $('#title').keyup(function(){
         if (!is_autosave_start) {
@@ -96,7 +99,8 @@ $(function($) {
             data: JSON.stringify(JSONdata)
         })
         .done(function(res) {
-            console.log('Auto Save');
+            // console.log('Auto Save');
+            addSnackbar('下書きを保存しました');
         })
         .fail(function(res) {
             console.log(res);
@@ -124,11 +128,18 @@ $(function($) {
                         var target = MediumEditor.getEditorFromElement(editor_elm[0]);
                         target.setContent(res[0].content, 0);
                     }
+                    addSnackbar('下書きを読み込みました');
                 }
             }
         })
         .fail(function(res) {
             console.log(res);
         });
+    }
+    
+    function addSnackbar(string) {
+      var snackbarContainer = document.querySelector('#autosave-toast');
+      var data = { message: string, timeout: 2000 };
+      snackbarContainer.MaterialSnackbar.showSnackbar(data);
     }
 });

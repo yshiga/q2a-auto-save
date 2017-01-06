@@ -28,6 +28,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             $warn_message = qa_lang_html('qa_as_lang/warn_message');
             if ($this->template === 'ask'
                 && qa_opt('editor_for_qs') === 'Medium Editor') {
+                $this->output_toast();
                 $ajax .= 'var resource = "question";';
                 $ajax .= 'var post_id = "0000";';
                 $ajax .= 'var warn_message ="'.$warn_message.'";';
@@ -35,6 +36,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 $this->output_script($ajax, $script);
             } elseif ($this->template === 'question'
                       && qa_opt('editor_for_as') == 'Medium Editor') {
+                $this->output_toast();
                 $post_id = $this->get_post_id();
                 $ajax .= 'var resource = "answer";';
                 $ajax .= 'var post_id ="'.$post_id.'";';
@@ -59,5 +61,13 @@ class qa_html_theme_layer extends qa_html_theme_base
             $post_id = "0000";
         }
         return $post_id;
+    }
+    
+    private function output_toast()
+    {
+        $this->output('<div id="autosave-toast" class="mdl-js-snackbar mdl-snackbar">');
+        $this->output('<div class="mdl-snackbar__text"></div>');
+        $this->output('<button class="mdl-snackbar__action" type="button"></button>');
+        $this->output('</div>');
     }
 }
