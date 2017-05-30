@@ -18,7 +18,6 @@ class qa_auto_save_response_page {
         if (sizeof($parts) > 2) {
             $resource = 'invalid';
         }
-        
         /* 
          * Internal security (non for third-party applications)
          * 
@@ -31,8 +30,8 @@ class qa_auto_save_response_page {
             $json_object = array ();
             
             $json_object ['statuscode'] = '401';
-            $json_object ['message'] = 'Unauthorized';
-            $json_object ['details'] = 'The user is not logged in.';
+            $json_object ['message'] = qa_lang_html('qa_as_lang/error_auth');
+            $json_object ['details'] = qa_lang_html('qa_as_lang/error_msg_auth');
             
             array_push ( $ret_val, $json_object );
             echo json_encode ( $ret_val, JSON_PRETTY_PRINT );
@@ -79,8 +78,8 @@ class qa_auto_save_response_page {
                 $json_object = array ();
                 
                 $json_object ['statuscode'] = '400';
-                $json_object ['message'] = 'Bad Request';
-                $json_object ['details'] = 'The request URI does not match the API in the system, or the operation failed for unknown reasons.';
+                $json_object ['message'] = qa_lang_html('qa_as_lang/error_bad_request');
+                $json_object ['details'] = qa_lang_html('qa_as_lang/error_msg_default');
                 
                 array_push ( $ret_val, $json_object );
                 echo json_encode ( $ret_val, JSON_PRETTY_PRINT );
@@ -103,8 +102,8 @@ class qa_auto_save_response_page {
         if (empty($json)) {
             http_response_code ( 204 );
             $json_object ['statuscode'] = '204';
-            $json_object ['message'] = 'No Content';
-            $json_object ['details'] = 'No Data';
+            $json_object ['message'] = qa_lang_html('qa_as_lang/error_no_content');
+            $json_object ['details'] = qa_lang_html('error_no_data');
             array_push ( $ret_val, $json_object );
             return json_encode ( $ret_val, JSON_PRETTY_PRINT );
         } else {
@@ -138,8 +137,8 @@ class qa_auto_save_response_page {
         $json_object = array();
         
         $json_object['statuscode'] = '200';
-        $json_object['message'] = 'draft saved';
-        $json_object['details'] = 'The content was saved.';
+        $json_object['message'] = qa_lang_html('qa_as_lang/saved');
+        $json_object['details'] = qa_lang_html('qa_as_lang/saved_msg');
         
         array_push($ret_val, $json_object);
         
