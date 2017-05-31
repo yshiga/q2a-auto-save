@@ -2,7 +2,6 @@ $(function($) {
     var is_autosave_start = false;
     var timer_id;
     var elem_name;
-    var warn_on_leave = false;
     var snackbarContainer = document.querySelector('#autosave-toast');
     
     $(window).on('load', function(){
@@ -17,7 +16,6 @@ $(function($) {
                 elem_name = 'a_content';
             }
             autosave_start(elem_name);
-            warn_on_leave = true;
         }
     });
     
@@ -26,36 +24,6 @@ $(function($) {
         if (!is_autosave_start && (elem_name === 'content' || elem_name === 'a_content')) {
             autosave_start(elem_name);
         }
-        warn_on_leave = true;
-    });
-    
-    $('input[type="submit"]').click(function(){
-        warn_on_leave = false;
-        // elem_id = $(this).attr('id');
-        // if (elem_id === 'q_submit' || elem_id === 'a_submit') {
-        //     ajax_set_item(elem_name);
-        // }
-    });
-    
-    $('button').click(function(){
-        warn_on_leave = false;
-        // elem_id = $(this).attr('id');
-        // if (elem_id === 'q_submit' || elem_id === 'a_submit') {
-        //     ajax_set_item(elem_name);
-        // }
-    });
-    
-    var onBeforeunloadHandler = function(e) {
-        if(warn_on_leave) {
-            return warn_message;
-        }
-    };
-    // warn_on_leaveのイベントを登録
-    $(window).on('beforeunload', onBeforeunloadHandler);
-
-    $('form').on('submit', function(e) {
-        // warn_on_leaveのイベントを削除
-        $(window).off('beforeunload', onBeforeunloadHandler);
     });
     
     function check_elem_name(name) {
