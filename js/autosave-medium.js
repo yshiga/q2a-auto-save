@@ -3,6 +3,8 @@ $(function($) {
     var timer_id;
     var elem_name;
     var snackbarContainer = document.querySelector('#autosave-toast');
+    var title_length;
+    var content_length;
     
     $(window).on('load', function(){
       ajax_get_item();
@@ -96,6 +98,10 @@ $(function($) {
                         var target = MediumEditor.getEditorFromElement(editor_elm[0]);
                         target.setContent(res[0].content, 0);
                     }
+                    update_title_length();
+                    update_content_length();
+                    update_confirm_status();
+                    
                     addSnackbar('下書きを読み込みました');
                 }
             }
@@ -109,5 +115,48 @@ $(function($) {
       var snackbarContainer = document.querySelector('#autosave-toast');
       var data = { message: string, timeout: 2000 };
       snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    }
+    function update_title_length(){
+        var disabled = true;
+        if($('#title').val()) {
+            title_length = $('#title').val().length;
+            if(title_length >= 20) {
+                $("#title-error").hide();
+            } else {
+                $("#title-error").show();
+            }
+            update_confirm_status();
+        }
+    }
+
+    function update_confirm_status(){
+        var disabled = true;
+        if(title_length >= 20 && content_length >= 20) {
+          disabled = false;
+        }
+        $("#confirm-button").prop("disabled", disabled);
+    }
+
+    function update_content_length() {
+        var disabled = true;
+        content_length = get_content_length();
+        if(content_length >= 20) {
+            $("#content-error").hide();
+        } else {
+            $("#content-error").show();
+        }
+        update_confirm_status();
+    }
+
+    function get_content_length() {
+        var content = '';
+        var editor_elm = document.getElementsByName('content');
+        if (editor_elm.length > 0) {
+            var target = MediumEditor.getEditorFromElement(editor_elm[0]);
+            var allContents = target.serialize();
+            var editorId = target.elements[0].id;
+            var content = allContents[editorId].value;
+        }
+        return $.trim(jQuery(content).text()).length;
     }
 });
