@@ -9,7 +9,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 if (isset($content['form'])) {
                     $content['form']['buttons']['ask']['tags'] .= ' id="q_submit"';
                 }
-            } 
+            }
         } elseif ($this->template === 'question') {
             if (qa_opt('editor_for_qs') == 'Medium Editor') {
                 if (isset($content['a_form']['buttons']['answer'])) {
@@ -19,11 +19,11 @@ class qa_html_theme_layer extends qa_html_theme_base
         }
         qa_html_theme_base::main_parts($content);
     }
-    
+
     function body_footer()
     {
         // ログインしているときだけscriptを読み込む
-        if (qa_is_logged_in()) {
+        if (!$this->mdl_is_android_app() && qa_is_logged_in()) {
             $ajax = 'var ajax_url = "'.qa_path('autosave').'/";';
             if ($this->template === 'ask'
                 && qa_opt('editor_for_qs') === 'Medium Editor') {
@@ -44,13 +44,13 @@ class qa_html_theme_layer extends qa_html_theme_base
         }
         qa_html_theme_base::body_footer();
     }
-    
+
     private function output_script($ajax, $script)
     {
         $this->output('<script>'.$ajax.'</script>');
         $this->output('<script src="'.$script.'"></script>');
     }
-    
+
     private function get_post_id()
     {
         $post_id = qa_request_part(0);
@@ -59,7 +59,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         }
         return $post_id;
     }
-    
+
     private function output_toast()
     {
         $this->output('<div id="autosave-toast" class="mdl-js-snackbar mdl-snackbar">');
