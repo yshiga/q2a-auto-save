@@ -23,7 +23,7 @@ class qa_html_theme_layer extends qa_html_theme_base
     function body_footer()
     {
         // ログインしているときだけscriptを読み込む
-        if (!$this->mdl_is_android_app() && qa_is_logged_in()) {
+        if ((method_exists('qa_html_theme_layer', 'mdl_is_android_app') && !$this->mdl_is_android_app()) && qa_is_logged_in()) {
             $ajax = 'var ajax_url = "'.qa_path('autosave').'/";';
             if ($this->template === 'ask'
                 && qa_opt('editor_for_qs') === 'Medium Editor') {
