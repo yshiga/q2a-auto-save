@@ -47,7 +47,14 @@ class qa_html_theme_layer extends qa_html_theme_base
 
     private function output_script($ajax, $script)
     {
-        $this->output('<script>'.$ajax.'</script>');
+        $lang_json = json_encode( $this->get_lang() );
+        $vars =<<<EOS
+<script>
+        $ajax
+        var as_lang = {$lang_json};
+</script>
+EOS;
+        $this->output($vars);
         $this->output('<script src="'.$script.'"></script>');
     }
 
@@ -66,5 +73,14 @@ class qa_html_theme_layer extends qa_html_theme_base
         $this->output('<div class="mdl-snackbar__text"></div>');
         $this->output('<button class="mdl-snackbar__action" type="button"></button>');
         $this->output('</div>');
+    }
+
+    private function get_lang()
+    {
+        return array(
+            'saved_draft' => qa_lang_html('qa_as_lang/saved_draft'),
+            'read_draft' => qa_lang_html('qa_as_lang/read_draft'),
+            'error_title_msg' => qa_lang_html('qa_as_lang/error_title_msg'),
+        );
     }
 }

@@ -9,4 +9,8 @@ return array(
 	'error_no_data' => 'データがありません',
 	'saved'	=> 'draft saved',
 	'saved_msg'	=> '保存しました。',
+	//js
+	'saved_draft' => '下書きを保存しました',
+	'read_draft' => '下書きを読み込みました',
+	'error_title_msg' => 'タイトルを20字以上入力してください',
 );
