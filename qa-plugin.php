@@ -2,8 +2,8 @@
 
 /*
 	Plugin Name: Auto Save
-	Plugin URI: Provide an automatic save.
-	Plugin Description: Test Plugin
+	Plugin URI: https://github.com/yshiga/q2a-auto-save
+	Plugin Description: Provide an automatic save.
 	Plugin Version: 1.0
 	Plugin Date: 2016-10-28
 	Plugin Author: 38qa.net

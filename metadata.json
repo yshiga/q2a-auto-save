@@ -1,0 +1,12 @@
+{
+	"name": "Auto Save",
+	"uri": "https://github.com/yshiga/q2a-auto-save",
+	"description": "Provide an automatic save.",
+	"version": "1.0.1",
+	"date": "2017-10-28",
+	"author": "38qa.net",
+	"author_uri": "http://38qa.net",
+	"license": "GPLv2",
+	"update_uri": "",
+	"min_q2a": "1.7"
+}
