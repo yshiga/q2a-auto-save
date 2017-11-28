@@ -70,7 +70,7 @@ $(function($) {
         })
         .done(function(res) {
             // console.log('Auto Save');
-            addSnackbar('下書きを保存しました');
+            addSnackbar(as_lang.saved_draft);
         })
         .fail(function(res) {
             console.log(res);
@@ -102,7 +102,7 @@ $(function($) {
                     update_content_length();
                     update_confirm_status();
                     
-                    addSnackbar('下書きを読み込みました');
+                    addSnackbar(as_lang.read_draft);
                 }
             }
         })
@@ -119,11 +119,18 @@ $(function($) {
     function update_title_length(){
         var disabled = true;
         if($('#title').val()) {
+            var parent = $('#title').parent().parent();
+            var title_error = '<span id="title-error" class="mdl-color-text--red">'+as_lang.error_title_msg+'</span>';
             title_length = $('#title').val().length;
             if(title_length >= 20) {
-                $("#title-error").hide();
+                if($("#title-error")[0]) {
+                    $("#title-error").remove();
+                }
             } else {
-                $("#title-error").show();
+                if(!$("#title-error")[0]) {
+                    parent.append(title_error);
+                    $("#title").addClass('error-title');
+                }
             }
             update_confirm_status();
         }
@@ -142,8 +149,10 @@ $(function($) {
         content_length = get_content_length();
         if(content_length >= 20) {
             $("#content-error").hide();
+            $(".editable").removeClass('error-content');
         } else {
             $("#content-error").show();
+            $(".editable").addClass('error-content');
         }
         update_confirm_status();
     }
