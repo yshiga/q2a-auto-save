@@ -60,6 +60,14 @@ class qa_auto_save_response_page {
                 }
                 break;
             
+            case 'blog' :
+                if (strcmp($method, 'POST') == 0) {
+                    $inputJSON = file_get_contents('php://input');
+                    echo $this->post_draft(AS_KEY_BLOG, $inputJSON);
+                } else {
+                    echo $this->get_draft(AS_KEY_BLOG);
+                }
+                break;
             // case 'comment' :
             //     if (strcmp($method, 'POST') == 0) {
             //         $inputJSON = file_get_contents('php://input');

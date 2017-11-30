@@ -40,6 +40,17 @@ class qa_html_theme_layer extends qa_html_theme_base
                 $ajax .= 'var post_id ="'.$post_id.'";';
                 $script = QA_HTML_THEME_LAYER_URLTOROOT.'js/autosave-medium.js';
                 $this->output_script($ajax, $script);
+            } elseif ($this->template === 'blog-new'
+                      && qa_opt('qas_blog_editor_for_ps') == 'Medium Editor') {
+                $this->output_toast();
+                $post_id = $this->get_post_id();
+                $ajax .= 'var resource = "blog";';
+                $ajax .= 'var post_id ="'.$post_id.'";';
+                $ajax .= 'var blog_title_min = '.qa_opt( 'qas_blog_min_len_post_title' ).';';
+                $ajax .= 'var blog_content_min = '.qa_opt( 'qas_blog_min_len_post_content' ).';';
+                $script = QA_HTML_THEME_LAYER_URLTOROOT.'js/autosave-medium.js';
+                $this->output_script($ajax, $script);
+
             }
         }
         qa_html_theme_base::body_footer();
