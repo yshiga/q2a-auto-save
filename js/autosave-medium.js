@@ -98,9 +98,14 @@ $(function($) {
                         var target = MediumEditor.getEditorFromElement(editor_elm[0]);
                         target.setContent(res[0].content, 0);
                     }
-                    update_title_length();
-                    update_content_length();
-                    update_confirm_status();
+                    if (resource === 'blog') {
+                        update_blog_title_length();
+                        update_blog_content_length();
+                    } else {
+                        update_title_length();
+                        update_content_length();
+                        update_confirm_status();
+                    }
                     
                     addSnackbar(as_lang.read_draft);
                 }
@@ -116,6 +121,7 @@ $(function($) {
       var data = { message: string, timeout: 2000 };
       snackbarContainer.MaterialSnackbar.showSnackbar(data);
     }
+
     function update_title_length(){
         var disabled = true;
         if($('#title').val()) {
@@ -167,5 +173,34 @@ $(function($) {
             var content = allContents[editorId].value;
         }
         return $.trim(jQuery(content).text()).length;
+    }
+
+    function update_blog_title_length() {
+        var disabled = true;
+        if($('#title').val()) {
+            title_length = $('#title').val().length;
+            if(title_length >= blog_title_min) {
+                $("#form-title-error").hide();
+                $("#title").removeClass('error-title');
+            } else {
+                $("#form-title-error").show();
+                $("#title").addClass('error-title');
+            }
+        } else {
+            $("#form-title-error").show();
+            $("#title").addClass('error-title');
+        }
+    }
+
+    function update_blog_content_length() {
+        var disabled = true;
+        content_length = get_content_length();
+        if(content_length >= blog_content_min) {
+            $("#form--error").hide();
+            $(".editable").removeClass('error-content');
+        } else {
+            $("#form--error").show();
+            $(".editable").addClass('error-content');
+        }
     }
 });

@@ -21,6 +21,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 define('AS_KEY_QUESTION', 'q2a_as_question');
 define('AS_KEY_ANSWER', 'q2a_as_answer');
 define('AS_KEY_COMMENT', 'q2a_as_comment');
+define('AS_KEY_BLOG', 'q2a_as_blog');
 
 // language
 qa_register_plugin_phrases('qa-auto-save-lang-*.php', 'qa_as_lang');
