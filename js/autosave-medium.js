@@ -94,7 +94,7 @@ $(function($) {
                         $('#title').val(res[0].title);
                     }
                     var editor_elm = document.getElementsByName(res[0].name);
-                    if (editor_elm.length > 0) {
+                    if (editor_elm.length > 0 && get_content_length() <= 0) {
                         var target = MediumEditor.getEditorFromElement(editor_elm[0]);
                         target.setContent(res[0].content, 0);
                     }
