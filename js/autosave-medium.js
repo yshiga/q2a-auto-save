@@ -89,26 +89,27 @@ $(function($) {
                 console.log(xhr.statusText);
             } else {
                 if (res[0] !== null && res[0] !== undefined) {
-                    if ($('#title') !== undefined) {
-                        if ($('#title').val().length <= 0) { 
-                            $('#title').val(res[0].title);
+                    // すでにタイトルや本文が入力されている場合は反映しない
+                    if (($('#title') !== undefined && $('#title').val().length > 0) || get_content_length > 0) {
+                        return;
+                    }
+                    if (resource === 'question' || resource === 'blog') {
+                        // 質問または飼育日誌
+                        var confirmDialog = document.querySelector('#confirm-autosave');
+                        if (! confirmDialog.showModal) {
+                            dialogPolyfill.registerDialog(confirmDialog);
                         }
-                    }
-                    var editor_elm = document.getElementsByName(res[0].name);
-                    if (editor_elm.length > 0 && get_content_length() <= 0) {
-                        var target = MediumEditor.getEditorFromElement(editor_elm[0]);
-                        target.setContent(res[0].content, 0);
-                    }
-                    if (resource === 'blog') {
-                        update_blog_title_length();
-                        update_blog_content_length();
+                        confirmDialog.showModal();
+                        confirmDialog.querySelector('.ok').addEventListener('click', function() {
+                            confirmDialog.close();
+                            set_autosave_content(res[0]);
+                        });
+                        confirmDialog.querySelector('.no').addEventListener('click', function() {
+                            confirmDialog.close();
+                        });
                     } else {
-                        update_title_length();
-                        update_content_length();
-                        update_confirm_status();
+                        set_autosave_content(res[0]);
                     }
-                    
-                    addSnackbar(as_lang.read_draft);
                 }
             }
         })
@@ -121,6 +122,29 @@ $(function($) {
       var snackbarContainer = document.querySelector('#autosave-toast');
       var data = { message: string, timeout: 2000 };
       snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    }
+
+    function set_autosave_content(res) {
+        if ($('#title') !== undefined) {
+            if ($('#title').val().length <= 0) { 
+                $('#title').val(res.title);
+            }
+        }
+        var editor_elm = document.getElementsByName(res.name);
+        if (editor_elm.length > 0 && get_content_length() <= 0) {
+            var target = MediumEditor.getEditorFromElement(editor_elm[0]);
+            target.setContent(res.content, 0);
+        }
+        if (resource === 'blog') {
+            update_blog_title_length();
+            update_blog_content_length();
+        } else {
+            update_title_length();
+            update_content_length();
+            update_confirm_status();
+        }
+        
+        addSnackbar(as_lang.read_draft);
     }
 
     function update_title_length(){

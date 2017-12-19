@@ -9,6 +9,8 @@ return array(
 	'error_no_data' => 'データがありません',
 	'saved'	=> 'draft saved',
 	'saved_msg'	=> '保存しました。',
+	'confirm_dialog_title' => '下書きを読み込みますか？',
+	'confirm_dialog_msg' => '前回に自動保存された下書きが残っています。下書きを読み込みますか？',
 	//js
 	'saved_draft' => '下書きを保存しました',
 	'read_draft' => '下書きを読み込みました',
