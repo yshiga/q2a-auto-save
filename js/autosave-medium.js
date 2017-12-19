@@ -1,6 +1,5 @@
 $(function($) {
     var is_autosave_start = false;
-    var timer_id;
     var elem_name;
     var snackbarContainer = document.querySelector('#autosave-toast');
     var title_length;
@@ -39,7 +38,7 @@ $(function($) {
     
     function autosave_start(elem_name) {
         is_autosave_start = true;
-        timer_id = setInterval(ajax_set_item, 30000, elem_name);
+        autosave_timer_id = setInterval(ajax_set_item, 30000, elem_name);
     }
     
     function editor_content(elem_name) {
@@ -91,7 +90,9 @@ $(function($) {
             } else {
                 if (res[0] !== null && res[0] !== undefined) {
                     if ($('#title') !== undefined) {
-                        $('#title').val(res[0].title);
+                        if ($('#title').val().length <= 0) { 
+                            $('#title').val(res[0].title);
+                        }
                     }
                     var editor_elm = document.getElementsByName(res[0].name);
                     if (editor_elm.length > 0 && get_content_length() <= 0) {

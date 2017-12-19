@@ -25,6 +25,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         // ログインしているときだけscriptを読み込む
         if ((method_exists('qa_html_theme_layer', 'mdl_is_android_app') && !$this->mdl_is_android_app()) && qa_is_logged_in()) {
             $ajax = 'var ajax_url = "'.qa_path('autosave').'/";';
+            $ajax .= 'var autsave_timer_id;';
             if ($this->template === 'ask'
                 && qa_opt('editor_for_qs') === 'Medium Editor') {
                 $this->output_toast();
