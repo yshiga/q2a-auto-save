@@ -17,6 +17,9 @@ class q2a_auto_save_event
         } elseif ($event === 'a_post') {
             $key = AS_KEY_ANSWER . '_' . $params['parentid'];
             qa_db_usermeta_clear($post_userid, $key);
+        } elseif ($event === 'qas_blog_b_post') {
+            $key = AS_KEY_BLOG . '_0000';
+            qa_db_usermeta_clear($post_userid, $key);
         }
     }
 }

@@ -25,6 +25,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         // ログインしているときだけscriptを読み込む
         if ((method_exists('qa_html_theme_layer', 'mdl_is_android_app') && !$this->mdl_is_android_app()) && qa_is_logged_in()) {
             $ajax = 'var ajax_url = "'.qa_path('autosave').'/";';
+            $ajax .= 'var autosave_timer_id;';
             if ($this->template === 'ask'
                 && qa_opt('editor_for_qs') === 'Medium Editor') {
                 $this->output_toast();
@@ -32,6 +33,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 $ajax .= 'var post_id = "0000";';
                 $script = QA_HTML_THEME_LAYER_URLTOROOT.'js/autosave-medium.js';
                 $this->output_script($ajax, $script);
+                $this->output_dialog();
             } elseif ($this->template === 'question'
                       && qa_opt('editor_for_as') == 'Medium Editor') {
                 $this->output_toast();
@@ -50,6 +52,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 $ajax .= 'var blog_content_min = '.qa_opt( 'qas_blog_min_len_post_content' ).';';
                 $script = QA_HTML_THEME_LAYER_URLTOROOT.'js/autosave-medium.js';
                 $this->output_script($ajax, $script);
+                $this->output_dialog();
 
             }
         }
@@ -93,5 +96,15 @@ EOS;
             'read_draft' => qa_lang_html('qa_as_lang/read_draft'),
             'error_title_msg' => qa_lang_html('qa_as_lang/error_title_msg'),
         );
+    }
+
+    private function output_dialog()
+    {
+        $confirmDialog = file_get_contents(AS_DIR.'/html/confirm-dialog.html');
+        $params = array(
+            '^title' => qa_lang('qa_as_lang/confirm_dialog_title'),
+            '^msg' => qa_lang('qa_as_lang/confirm_dialog_msg'),
+        );
+        $this->output(strtr($confirmDialog, $params));
     }
 }
