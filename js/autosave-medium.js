@@ -90,7 +90,7 @@ $(function($) {
             } else {
                 if (res[0] !== null && res[0] !== undefined) {
                     // すでにタイトルや本文が入力されている場合は反映しない
-                    if (($('#title') !== undefined && $('#title').val().length > 0) || get_content_length > 0) {
+                    if (($('#title') !== undefined && $('#title').val().length > 0) || get_content_length() > 0) {
                         return;
                     }
                     if (resource === 'question' || resource === 'blog') {
@@ -138,6 +138,7 @@ $(function($) {
         if (resource === 'blog') {
             update_blog_title_length();
             update_blog_content_length();
+            update_blog_submit_status();
         } else {
             update_title_length();
             update_content_length();
@@ -200,6 +201,14 @@ $(function($) {
         return $.trim(jQuery(content).text()).length;
     }
 
+    function update_blog_submit_status() {
+        var disabled = true;
+        if (title_length >= blog_title_min && content_length >= blog_content_min) {
+            disabled = false;
+        }
+        $("#blog-submit").prop("disabled", disabled);
+    }
+
     function update_blog_title_length() {
         var disabled = true;
         if($('#title').val()) {
@@ -215,6 +224,7 @@ $(function($) {
             $("#form-title-error").show();
             $("#title").addClass('error-title');
         }
+        update_blog_submit_status();
     }
 
     function update_blog_content_length() {
@@ -227,5 +237,6 @@ $(function($) {
             $("#form--error").show();
             $(".editable").addClass('error-content');
         }
+        update_blog_submit_status();
     }
 });
