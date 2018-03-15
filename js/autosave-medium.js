@@ -206,7 +206,7 @@ $(function($) {
         if (title_length >= blog_title_min && content_length >= blog_content_min) {
             disabled = false;
         }
-        $("#blog-submit").prop("disabled", disabled);
+        $("#blog-confirm-button").prop("disabled", disabled);
     }
 
     function update_blog_title_length() {
