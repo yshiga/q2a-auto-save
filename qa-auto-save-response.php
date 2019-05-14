@@ -116,6 +116,7 @@ class qa_auto_save_response_page {
             return json_encode ( $ret_val, JSON_PRETTY_PRINT );
         } else {
             $json_object = json_decode($json);
+            $json_object->content = $this->image_replace($json_object->content);
         }
         
         http_response_code(200);
@@ -153,5 +154,23 @@ class qa_auto_save_response_page {
         http_response_code(200);
         
         return json_encode($ret_val, JSON_PRETTY_PRINT);
+    }
+    
+    private function image_replace($text)
+    {
+        // 画像タグの変換
+        if (function_exists('qme_remove_images_class')) {
+            $text = qme_remove_images_class($text);
+        }
+        $imagetag = file_get_contents(MEDIUM_EDITOR_DIR . '/html/image-url.html');
+        $image = array(
+            "/\<div class=\"medium-insert-images\">(.*)\<div class=\"image-url\"\>\[image=\"?([^\"\]]+)\"?\]\<\/div\>(.*)<\/div\>/isU",
+        );
+        if (function_exists('qme_remove_anchor')) {
+            $text = qme_remove_anchor($text);
+        }
+        $text = preg_replace($image[0], $imagetag, $text);
+
+        return $text;
     }
 }
