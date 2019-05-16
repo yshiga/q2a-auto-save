@@ -90,11 +90,18 @@ $(function($) {
             } else {
                 if (res[0] !== null && res[0] !== undefined) {
                     // すでにタイトルや本文が入力されている場合は反映しない
-                    if (($('#title') !== undefined && $('#title').val().length > 0) || get_content_length() > 0) {
-                        return;
+                    if ($('#title').val() !== undefined) {
+                        if ($('#title').val().length > 0 || get_content_length() > 0) {
+                            return;
+                        }
                     }
-                    if (resource === 'question' || resource === 'blog') {
-                        // 質問または飼育日誌
+                    if (resource === 'question' 
+                     || resource === 'blog'
+                     || resource === 'answer') {
+                        if (resource === 'answer' && $('#a_content').val() === undefined) {
+                            return;
+                        }
+                        // 質問または飼育日誌または質問未回答
                         var confirmDialog = document.querySelector('#confirm-autosave');
                         if (! confirmDialog.showModal) {
                             dialogPolyfill.registerDialog(confirmDialog);
@@ -125,7 +132,7 @@ $(function($) {
     }
 
     function set_autosave_content(res) {
-        if ($('#title') !== undefined) {
+        if ($('#title').val() !== undefined) {
             if ($('#title').val().length <= 0) { 
                 $('#title').val(res.title);
             }
@@ -139,6 +146,17 @@ $(function($) {
             update_blog_title_length();
             update_blog_content_length();
             update_blog_submit_status();
+        } else if (resource === 'answer') {
+            var $aform = $('#a_content');
+            var scroll = $aform.parent().offset().top;
+            var body = window.document.body;
+            var html = window.document.documentElement;
+            var scrollTop = body.scrollTop || html.scrollTop;
+            var clientBottom = html.clientHeight + scrollTop;
+            var elemPos = scroll + ($aform.parent().outerHeight()/2)
+            if (elemPos > clientBottom) {
+                $('html,body').animate({scrollTop: scroll-100}, 400);
+            }
         } else {
             update_title_length();
             update_content_length();
