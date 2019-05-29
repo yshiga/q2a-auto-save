@@ -42,14 +42,7 @@ $(function($) {
     }
     
     function editor_content(elem_name) {
-        var content = '';
-        var editor_elm = document.getElementsByName(elem_name);
-        if (editor_elm.length > 0) {
-            var target = MediumEditor.getEditorFromElement(editor_elm[0]);
-            var allContents = target.serialize();
-            var editorId = target.elements[0].id;
-            var content = allContents[editorId].value;
-        }
+        var content = get_content(elem_name);
         return content;
     }
     

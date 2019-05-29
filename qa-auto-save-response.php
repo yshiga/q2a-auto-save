@@ -101,11 +101,11 @@ class qa_auto_save_response_page {
         $json_object = array();
         $post_id = qa_get('postid');
         if (!empty($post_id)) {
-            $key .= '_' . $post_id;
+            $key_id = $key . '_' . $post_id;
         }
         
         $userid = qa_get_logged_in_userid();
-        $json = qa_db_usermeta_get($userid, $key);
+        $json = qa_db_usermeta_get($userid, $key_id);
         
         if (empty($json)) {
             http_response_code ( 204 );
@@ -162,6 +162,10 @@ class qa_auto_save_response_page {
         if (function_exists('qme_remove_images_class')) {
             $text = qme_remove_images_class($text);
         }
+        
+        // figureタグにimgタグが残っている場合削除
+        $text = preg_replace('/<figure .*><img [^>]*><\/figure>/', '', $text);
+        // [image=...] => <img src="...">への変換
         $imagetag = file_get_contents(MEDIUM_EDITOR_DIR . '/html/image-url.html');
         $image = array(
             "/\<div class=\"medium-insert-images\">(.*)\<div class=\"image-url\"\>\[image=\"?([^\"\]]+)\"?\]\<\/div\>(.*)<\/div\>/isU",
